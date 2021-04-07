@@ -33,6 +33,7 @@ body {
 
 .genFormHolder {
   position: relative;
+  z-index: 1;
 }
 
 .deleteButtonHolder {
@@ -43,6 +44,7 @@ body {
   display: flex;
   position: absolute;
   right:0px;
+  z-index: 99;
 }
 
 .actionIcon {
@@ -50,6 +52,11 @@ body {
   width: auto;
   padding: 10px;
 }
+
+.actionIcon.hidden {
+  display: none;
+}
+
 .actionIcon:hover {
   cursor: pointer;
 }
