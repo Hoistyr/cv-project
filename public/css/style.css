@@ -1,0 +1,65 @@
+body {
+  margin:0;
+}
+
+.app  {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  height: 80px;
+  width: 100%;
+  background-color: aqua;
+}
+
+.form {
+  margin-top: 10px;
+  background-color: bisque;
+  width: 90%;
+  height: 100%;
+}
+
+.genFormHolder.hoverEdit {
+  background-color: blue;
+}
+
+.genForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.genFormHolder {
+  position: relative;
+}
+
+.deleteButtonHolder {
+  position: relative;
+}
+
+.iconDiv {
+  display: flex;
+  position: absolute;
+  right:0px;
+}
+
+.actionIcon {
+  height: 30px;
+  width: auto;
+  padding: 10px;
+}
+.actionIcon:hover {
+  cursor: pointer;
+}
+
+.edForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.expForm {
+  display: flex;
+  flex-direction: column;
+}
