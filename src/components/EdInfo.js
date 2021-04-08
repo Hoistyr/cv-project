@@ -1,12 +1,13 @@
 import React from 'react';
+import uniqid from 'uniqid';
+import editIcon from '../images/icons/editIcon.svg';
+import deleteIcon from '../images/icons/deleteIcon.svg';
 
 class EdInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      genInfo: {},
-      viewing: false,
-      editing: false,
+      edInfo: [],
     }
 
     this.saveForm = this.saveForm.bind(this);
@@ -14,30 +15,41 @@ class EdInfo extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.addEducation = this.addEducation.bind(this);
+    this.saveEdit = this.saveEdit.bind(this);
   }
 
   saveForm(event) {
     console.log('saveForm');
     event.preventDefault();
-    const genInputs = event.target.parentNode.querySelectorAll('input');
-    console.log(genInputs);
-    let genObject = {};
-    genInputs.forEach((input) => {
-      genObject[input.name] = input.value
-      
+    const edInputs = event.target.parentNode.querySelectorAll('input');
+    console.log(edInputs);
+    let edObject = {};
+    edInputs.forEach((input) => {
+      edObject[input.name] = input.value
     });
-    console.log(genObject);
-    this.setState({viewing: true, editing: false, genInfo: genObject});
+    edObject['id'] = uniqid();
+    edObject['viewing'] = true;
+    edObject['editing'] = false;
     
+    this.setState({edInfo: [...this.state.edInfo, edObject]});
+    
+    const removeIndex = this.state.edInfo.findIndex((form) => form.removeMe === true);
+    if (removeIndex > -1) {
+      const removeTempObject = this.state.edInfo.splice(removeIndex, 1);
+      console.log('rto ', removeTempObject);
+      this.setState({edInfo: removeTempObject});
+      this.setState({edInfo: [...this.state.edInfo, edObject]});
+    }
   }
 
   handleMouseEnter(event) {
     let form = event.target;
-    if (!form.classList.contains('genFormHolder')) {
+    if (!form.classList.contains('edFormHolder')) {
       form = form.parentNode;
-      if (!form.classList.contains('genFormHolder')) {
+      if (!form.classList.contains('edFormHolder')) {
         form = form.parentNode;
-        if (!form.classList.contains('genFormHolder')) {
+        if (!form.classList.contains('edFormHolder')) {
           form = form.parentNode;
         }
       }
@@ -50,13 +62,12 @@ class EdInfo extends React.Component {
   }
 
   handleMouseLeave(event) {
-    let form = event.target;
-    
-    if (!form.classList.contains('genFormHolder')) {
+    let form = event.target;    
+    if (!form.classList.contains('edFormHolder')) {
       form = form.parentNode;
-      if (!form.classList.contains('genFormHolder')) {
+      if (!form.classList.contains('edFormHolder')) {
         form = form.parentNode;
-        if (!form.classList.contains('genFormHolder')) {
+        if (!form.classList.contains('edFormHolder')) {
           form = form.parentNode;
         }
       }
@@ -71,93 +82,191 @@ class EdInfo extends React.Component {
 
   handleEdit(event) {
     console.log('edit');
-    console.log(this.state.genInfo);
-    this.setState({viewing: false, editing: true});
+    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
+    const changeToEdit = this.state.edInfo.map((form) => {
+      if (form.id === formHolderID) {
+        console.log('match');
+        form.viewing = false;
+        form.editing = true;
+        return form;
+      }
+      return form;
+    });
+    console.log(changeToEdit);
+    this.setState({edInfo: changeToEdit});
+    
+    // ADDME
+    // get id
+    // change form editing to true and viewing to false if id matches
+  }
+
+  saveEdit(event) {
+    event.preventDefault();
+    const formHolderID = event.target.parentNode.parentNode.attributes.formid.value;
+
+    const edInputs = event.target.parentNode.querySelectorAll('input');
+    const editedArray = this.state.edInfo.map((form) => {
+      if (form.id === formHolderID) {
+        edInputs.forEach((input) => {
+          form[input.name] = input.value
+        });
+        form['viewing'] = true;
+        form['editing'] = false;
+        return form;
+      }
+      return form;
+    })
+    
+    this.setState({edInfo: editedArray});
   }
 
   handleDelete(event) {
     console.log('delete');
-    this.setState({genInfo: {}, viewing: false, editing: false});
+    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
+    const delArray =  this.state.edInfo.filter((form) => {
+      if (form.id === formHolderID) {
+        return false;
+      }
+      return true;
+    });
+
+    this.setState({edInfo: delArray});
+  }
+
+  addEducation(event) {
+    event.preventDefault();
+    console.log('inadded');
+    const emptyEd = {
+      editing: false,
+      viewing: false,
+      removeMe: true,
+    }
+    this.setState({edInfo: [...this.state.edInfo, emptyEd]});
   }
   render () {
-    const defaultForm = 
-    <div className="edInfoHolder">
-      <div className="edInfo">
-        <form className="edForm">
-            <h1>Education:</h1>
-            
-            <label htmlFor="schoolName">
-              University Name:
-              <input type="text" name="schoolName"/>
-            </label>
-            
-            <label htmlFor="city">
-              City:
-              <input type="text" name="city"/>
-            </label>
-
-            <label htmlFor="state">
-              State:
-              <input type="text" name="state"/>
-            </label>
-            
-            <label htmlFor="degreeType">
-              Degree Type:
-              <input type="text" name="degreeType" defaultValue="Ex: MA, BS, PhD"/>
-            </label>
-            
-            <label htmlFor="subject">
-              Subject:
-              <input type="text" name="subject" defaultValue="Ex: Computer Science, Communication"/>
-            </label>
-            
-            <label htmlFor="startDate">
-            From:
-            <input type="date" name="startDate" />
-            </label>
-            
-            <label htmlFor="endDate">
-              To:
-              <input type="date" name="endDate" />
-            </label>
-            
-            <button className="addEducationBtn" onClick={this.saveForm}>Add</button>
-          </form>
-        </div>
-      </div>
-
-    const viewForm = 
-    <div className="edInfoHolder">
-      <div className="edInfo">
-        <form className="edForm">
-            <h1>Education:</h1>
-            <p>{this.state.genInfo.schoolName}</p>
-            <p>{this.state.genInfo.city}</p>
-            <p>{this.state.genInfo.state}</p>
-            <p>{this.state.genInfo.degreeType}</p>
-            <p>{this.state.genInfo.subject}</p>
-            <p>{this.state.genInfo.from}</p>
-            <p>{this.state.genInfo.to}</p>
-        
-            
-            <button className="addEducationBtn" onClick={this.saveForm}>Add</button>
-          </form>
-        </div>
-      </div>
+    console.log('edInfo ', this.state.edInfo); 
     
-    let returnForm = '';
-    returnForm = defaultForm;
-    if (this.state.viewing === true && this.state.editing !== true) {
-      returnForm = viewForm;
+    const defaultForm = 
+    <div className="edFormHolder">
+        <form className="edForm">
+          <label htmlFor="schoolName">
+            <input type="text" name="schoolName" placeholder="University Name"/>
+          </label>
+          
+          <label htmlFor="city">
+            <input type="text" name="city" placeholder="City"/>
+          </label>
+
+          <label htmlFor="state">
+            <input type="text" name="state" placeholder="State"/>
+          </label>
+          
+          <label htmlFor="degreeType">
+            <input type="text" name="degreeType" placeholder="Degree Type: MA, BS, PhD, etc"/>
+          </label>
+          
+          <label htmlFor="subject">
+            <input type="text" name="subject" placeholder="Degree Subject: (Computer Science, Communication, etc)"/>
+          </label>
+          
+          <label htmlFor="startDate">
+          <input type="text" name="startDate" placeholder="Date Started"/>
+          </label>
+          
+          <label htmlFor="endDate">
+            <input type="text" name="endDate" placeholder="Date Received"/>
+          </label>
+          
+          <button className="addEducationBtn" onClick={this.saveForm}>Save</button>
+        </form>
+    </div>
+
+  const editForm = (form) => {
+    const finishedForm =
+    <div className="edFormHolder" key={form.id} formid={form.id}>
+        <form className="edForm">
+          <label htmlFor="schoolName">
+            <input type="text" name="schoolName" defaultValue={form.schoolName} placeholder="University Name"/>
+          </label>
+          
+          <label htmlFor="city">
+            <input type="text" name="city" defaultValue={form.city} placeholder="City"/>
+          </label>
+
+          <label htmlFor="state">
+            <input type="text" name="state" defaultValue={form.state} placeholder="State"/>
+          </label>
+          
+          <label htmlFor="degreeType">
+            <input type="text" name="degreeType" defaultValue={form.degreeType} placeholder="Degree Type: MA, BS, PhD, etc"/>
+          </label>
+          
+          <label htmlFor="subject">
+            <input type="text" name="subject" defaultValue={form.subject}placeholder="Degree Subject: (Computer Science, Communication, etc)"/>
+          </label>
+          
+          <label htmlFor="startDate">
+          <input type="text" name="startDate" defaultValue={form.startDate} placeholder="Date Started"/>
+          </label>
+          
+          <label htmlFor="endDate">
+            <input type="text" name="endDate" defaultValue={form.endDate}placeholder="Date Recieved"/>
+          </label>
+          
+          <button className="addEducationBtn" onClick={this.saveEdit}>Save Edit</button>
+        </form>
+    </div>
+    return finishedForm;
+  }
+    
+    const viewForm = (form) => {
+      console.log('in viewform');
+      const finishedForm =
+      <div className="edFormHolder infoForm" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} key={form.id} formid={form.id}>
+        <div className="iconDiv">
+          <div className="editButtonHolder" onClick={this.handleEdit}>
+            <img className="editIcon actionIcon" src={editIcon} alt="Click this to edit" ></img>
+          </div>
+          <div className="deleteButtonHolder" onClick={this.handleDelete}>
+            <img className="deleteIcon actionIcon" src={deleteIcon} alt="Click this to delete"></img>
+          </div>
+        </div>
+        
+        <form className="edForm">
+          <p className="edSchoolName">{form.schoolName}</p>
+          <p className="edCity">{form.city}</p>
+          <p className="edState">{form.state}</p>
+          <p className="edDegreeType">{form.degreeType}</p>
+          <p className="edDegreeSubject">{form.subject}</p>
+          <p className="edFrom">{form.from}</p>
+          <p className="edTo">{form.to}</p>
+        </form>
+    </div>;
+      return finishedForm;
     }
-    if (this.state.editing === true && this.state.viewing !== true) {
-      console.log('editing');
-      // returnForm = editForm;
+
+    let returnForm = defaultForm;
+    console.log(this.state.edInfo.length);
+    if (this.state.edInfo.length > 0) {
+      returnForm = this.state.edInfo.map((form) => {
+        console.log(form);
+        if (form.viewing === true) {
+          console.log('return viewing');
+          return viewForm(form);
+        }
+        if (form.editing === true) {
+          return editForm(form);
+        }
+        return defaultForm;
+      });
     }
+    console.log('rf ', returnForm);
 
   return (
     <div className="edInfo">
+      <h1>Education:</h1>
       {returnForm}
+      <button className="addEducationBtn" onClick={this.addEducation}>Add</button>
     </div>
   )
   }

@@ -16,6 +16,15 @@ body {
 }
 
 .form {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input {
   margin-top: 10px;
   background-color: bisque;
   width: 90%;
@@ -69,4 +78,19 @@ body {
 .expForm {
   display: flex;
   flex-direction: column;
+}
+
+.preview {
+  margin-top: 20px;;
+  background-color: burlywood;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.fullNameDiv {
+  margin: 20px;
+  width: 95%;
+  border: solid 5px black;
 }
