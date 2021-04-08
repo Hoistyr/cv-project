@@ -1,6 +1,4 @@
 import React from 'react';
-import editIcon from '../images/icons/editIcon.svg';
-import deleteIcon from '../images/icons/deleteIcon.svg';
 
 class GenInfo extends React.Component {
   constructor(props) {
@@ -10,27 +8,8 @@ class GenInfo extends React.Component {
       viewing: false,
       editing: false,
     }
-
-    this.saveForm = this.saveForm.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  saveForm(event) {
-    console.log('saveForm');
-    event.preventDefault();
-    const genInputs = event.target.parentNode.querySelectorAll('input, textarea');
-    console.log(genInputs);
-    let genObject = {};
-    genInputs.forEach((input) => {
-      genObject[input.name] = input.value
-      
-    });
-    console.log(genObject);
-    this.setState({viewing: true, editing: false, genInfo: genObject});
-    
   }
 
   handleMouseEnter(event) {
@@ -63,7 +42,6 @@ class GenInfo extends React.Component {
         }
       }
     }
-    
     form.classList.remove('hoverEdit');
     const icons = form.querySelectorAll('.actionIcon');
     icons.forEach((icon) => {
@@ -71,25 +49,14 @@ class GenInfo extends React.Component {
     });
   }
 
-  handleEdit(event) {
-    console.log('edit');
-    console.log(this.state.genInfo);
-    this.setState({viewing: false, editing: true});
-  }
-
-  handleDelete(event) {
-    console.log('delete');
-    this.setState({genInfo: {}, viewing: false, editing: false});
-  }
-
   render () {
-    console.log('props ', this.props);
-    let genObject = this.props.genObject;
-    let genInfo = '';
-    if (this.props.genObject.genInfo) {
-      genInfo = this.props.genObject.genInfo;
+    let genShip = this.props.genShip;
+    let genInfo = ''; 
+    console.log('genprops ', this.props);
+    if (this.props.genShip.genInfo) {
+      genInfo = this.props.genShip.genInfo;
     }
-    console.log('state ', this.state);
+    console.log('genInfo', genInfo);
     let returnForm = '';
     
     const defaultForm = 
@@ -119,16 +86,11 @@ class GenInfo extends React.Component {
         </form>
       </div>
       
-
       const viewForm =
       <div className="genFormHolder infoForm" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <div className="iconDiv">
-          <div className="editButtonHolder" onClick={this.handleEdit}>
-            <img className="editIcon actionIcon" src={editIcon} alt="Click this to edit" ></img>
-          </div>
-          <div className="deleteButtonHolder" onClick={this.handleDelete}>
-            <img className="deleteIcon actionIcon" src={deleteIcon} alt="Click this to delete"></img>
-          </div>
+          {this.props.handleEdit}
+          {this.props.handleDelete}
         </div>
         
         <div className="genForm">
@@ -146,33 +108,33 @@ class GenInfo extends React.Component {
           <form className="genForm">
             <h1>Personal Information:</h1>
               <label htmlFor="firstName">
-                <input type="text" name="firstName" defaultValue={this.state.genInfo.firstName} placeholder="First Name"/>
+                <input type="text" name="firstName" defaultValue={genInfo.firstName} placeholder="First Name"/>
               </label>
               <label htmlFor="lastName">
-                <input type="text" name="lastName" defaultValue={this.state.genInfo.lastName} placeholder="Last Name"/>
+                <input type="text" name="lastName" defaultValue={genInfo.lastName} placeholder="Last Name"/>
               </label>
               <label htmlFor="email">
-                <input type="email" name="email" defaultValue={this.state.genInfo.email} placeholder="Email: (Example@example.com)"/>
+                <input type="email" name="email" defaultValue={genInfo.email} placeholder="Email: (Example@example.com)"/>
               </label>
               <label htmlFor="phone">
-                <input type="tel" name="phone" defaultValue={this.state.genInfo.phone} placeholder="Phone"/>
+                <input type="tel" name="phone" defaultValue={genInfo.phone} placeholder="Phone"/>
               </label>
               <label htmlFor="linkedIn">
-                <input type="link" name="linkedIn" defaultValue={this.state.genInfo.linkedIn} placeholder="LinkedIn: (https://www.linkedin.com/FooBar)"/>
+                <input type="link" name="linkedIn" defaultValue={genInfo.linkedIn} placeholder="LinkedIn: (https://www.linkedin.com/FooBar)"/>
               </label>
               <label htmlFor="aboutMe">
-              <textarea name="aboutMe" defaultValue={this.state.genInfo.aboutMe} placeholder="Additional information"></textarea>
+              <textarea name="aboutMe" defaultValue={genInfo.aboutMe} placeholder="Additional information"></textarea>
               </label>
-              <button className="saveGen" onClick={this.saveForm}>Save</button>
+              {this.props.saveButton}
           </form>
         </div>
       
 
       returnForm = defaultForm;
-      if (genObject.viewing === true) {
+      if (genShip.viewing === true) {
         returnForm = viewForm;
       }
-      if (genObject.editing === true) {
+      if (genShip.editing === true) {
         returnForm = editForm;
       }
 

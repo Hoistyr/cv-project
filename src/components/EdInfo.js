@@ -1,7 +1,4 @@
 import React from 'react';
-import uniqid from 'uniqid';
-import editIcon from '../images/icons/editIcon.svg';
-import deleteIcon from '../images/icons/deleteIcon.svg';
 
 class EdInfo extends React.Component {
   constructor(props) {
@@ -9,38 +6,9 @@ class EdInfo extends React.Component {
     this.state = {
       edInfo: [],
     }
-
-    this.saveForm = this.saveForm.bind(this);
+    
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.addEducation = this.addEducation.bind(this);
-    this.saveEdit = this.saveEdit.bind(this);
-  }
-
-  saveForm(event) {
-    console.log('saveForm');
-    event.preventDefault();
-    const edInputs = event.target.parentNode.querySelectorAll('input');
-    console.log(edInputs);
-    let edObject = {};
-    edInputs.forEach((input) => {
-      edObject[input.name] = input.value
-    });
-    edObject['id'] = uniqid();
-    edObject['viewing'] = true;
-    edObject['editing'] = false;
-    
-    this.setState({edInfo: [...this.state.edInfo, edObject]});
-    
-    const removeIndex = this.state.edInfo.findIndex((form) => form.removeMe === true);
-    if (removeIndex > -1) {
-      const removeTempObject = this.state.edInfo.splice(removeIndex, 1);
-      console.log('rto ', removeTempObject);
-      this.setState({edInfo: removeTempObject});
-      this.setState({edInfo: [...this.state.edInfo, edObject]});
-    }
   }
 
   handleMouseEnter(event) {
@@ -79,72 +47,12 @@ class EdInfo extends React.Component {
       icon.classList.add('hidden');
     });
   }
-
-  handleEdit(event) {
-    console.log('edit');
-    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
-    const changeToEdit = this.state.edInfo.map((form) => {
-      if (form.id === formHolderID) {
-        console.log('match');
-        form.viewing = false;
-        form.editing = true;
-        return form;
-      }
-      return form;
-    });
-    console.log(changeToEdit);
-    this.setState({edInfo: changeToEdit});
-    
-    // ADDME
-    // get id
-    // change form editing to true and viewing to false if id matches
-  }
-
-  saveEdit(event) {
-    event.preventDefault();
-    const formHolderID = event.target.parentNode.parentNode.attributes.formid.value;
-
-    const edInputs = event.target.parentNode.querySelectorAll('input');
-    const editedArray = this.state.edInfo.map((form) => {
-      if (form.id === formHolderID) {
-        edInputs.forEach((input) => {
-          form[input.name] = input.value
-        });
-        form['viewing'] = true;
-        form['editing'] = false;
-        return form;
-      }
-      return form;
-    })
-    
-    this.setState({edInfo: editedArray});
-  }
-
-  handleDelete(event) {
-    console.log('delete');
-    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
-    const delArray =  this.state.edInfo.filter((form) => {
-      if (form.id === formHolderID) {
-        return false;
-      }
-      return true;
-    });
-
-    this.setState({edInfo: delArray});
-  }
-
-  addEducation(event) {
-    event.preventDefault();
-    console.log('inadded');
-    const emptyEd = {
-      editing: false,
-      viewing: false,
-      removeMe: true,
-    }
-    this.setState({edInfo: [...this.state.edInfo, emptyEd]});
-  }
+  
   render () {
-    console.log('edInfo ', this.state.edInfo); 
+    let edArray = '';
+    if (this.props.edShip.edArray.length) {
+      edArray = this.props.edShip.edArray;
+    }
     
     const defaultForm = 
     <div className="edFormHolder">
@@ -177,7 +85,7 @@ class EdInfo extends React.Component {
             <input type="text" name="endDate" placeholder="Date Received"/>
           </label>
           
-          <button className="addEducationBtn" onClick={this.saveForm}>Save</button>
+          {this.props.saveButton}
         </form>
     </div>
 
@@ -213,7 +121,7 @@ class EdInfo extends React.Component {
             <input type="text" name="endDate" defaultValue={form.endDate}placeholder="Date Recieved"/>
           </label>
           
-          <button className="addEducationBtn" onClick={this.saveEdit}>Save Edit</button>
+          {this.props.saveEdit}
         </form>
     </div>
     return finishedForm;
@@ -224,12 +132,8 @@ class EdInfo extends React.Component {
       const finishedForm =
       <div className="edFormHolder infoForm" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} key={form.id} formid={form.id}>
         <div className="iconDiv">
-          <div className="editButtonHolder" onClick={this.handleEdit}>
-            <img className="editIcon actionIcon" src={editIcon} alt="Click this to edit" ></img>
-          </div>
-          <div className="deleteButtonHolder" onClick={this.handleDelete}>
-            <img className="deleteIcon actionIcon" src={deleteIcon} alt="Click this to delete"></img>
-          </div>
+          {this.props.handleEdit}
+          {this.props.handleDelete}
         </div>
         
         <form className="edForm">
@@ -246,10 +150,9 @@ class EdInfo extends React.Component {
     }
 
     let returnForm = defaultForm;
-    console.log(this.state.edInfo.length);
-    if (this.state.edInfo.length > 0) {
-      returnForm = this.state.edInfo.map((form) => {
-        console.log(form);
+    if (edArray.length > 0) {
+      returnForm = edArray.map((form) => {
+        console.log('edarray form ', form);
         if (form.viewing === true) {
           console.log('return viewing');
           return viewForm(form);
@@ -260,13 +163,12 @@ class EdInfo extends React.Component {
         return defaultForm;
       });
     }
-    console.log('rf ', returnForm);
-
-  return (
-    <div className="edInfo">
-      <h1>Education:</h1>
-      {returnForm}
-      <button className="addEducationBtn" onClick={this.addEducation}>Add</button>
+    
+    return (
+      <div className="edInfo">
+        <h1>Education:</h1>
+        {returnForm}
+        {this.props.addEducationButton}
     </div>
   )
   }

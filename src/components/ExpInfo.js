@@ -1,7 +1,4 @@
 import React from 'react';
-import uniqid from 'uniqid';
-import editIcon from '../images/icons/editIcon.svg';
-import deleteIcon from '../images/icons/deleteIcon.svg';
 
 class ExpInfo extends React.Component {
   constructor(props) {
@@ -9,39 +6,9 @@ class ExpInfo extends React.Component {
     this.state = {
       expInfo: [],
     }
-
-    this.saveForm = this.saveForm.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.addExperience = this.addExperience.bind(this);
-    this.saveEdit = this.saveEdit.bind(this);
     this.clearText = this.clearText.bind(this);
-  }
-
-  saveForm(event) {
-    console.log('saveForm');
-    event.preventDefault();
-    const expInputs = event.target.parentNode.querySelectorAll('input,  textarea');
-    console.log(expInputs);
-    let expObject = {};
-    expInputs.forEach((input) => {
-      expObject[input.name] = input.value
-    });
-    expObject['id'] = uniqid();
-    expObject['viewing'] = true;
-    expObject['editing'] = false;
-    
-    this.setState({expInfo: [...this.state.expInfo, expObject]});
-    
-    const removeIndex = this.state.expInfo.findIndex((form) => form.removeMe === true);
-    if (removeIndex > -1) {
-      const removeTempObject = this.state.expInfo.splice(removeIndex, 1);
-      console.log('rto ', removeTempObject);
-      this.setState({expInfo: removeTempObject});
-      this.setState({expInfo: [...this.state.expInfo, expObject]});
-    }
   }
 
   clearText(event) {
@@ -86,68 +53,12 @@ class ExpInfo extends React.Component {
     });
   }
 
-  handleEdit(event) {
-    console.log('edit');
-    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
-    const changeToEdit = this.state.expInfo.map((form) => {
-      if (form.id === formHolderID) {
-        console.log('match');
-        form.viewing = false;
-        form.editing = true;
-        return form;
-      }
-      return form;
-    });
-    console.log(changeToEdit);
-    this.setState({expInfo: changeToEdit});
-  }
-
-  saveEdit(event) {
-    event.preventDefault();
-    const formHolderID = event.target.parentNode.parentNode.attributes.formid.value;
-
-    const expInputs = event.target.parentNode.querySelectorAll('input, textarea');
-    const editedArray = this.state.expInfo.map((form) => {
-      if (form.id === formHolderID) {
-        expInputs.forEach((input) => {
-          form[input.name] = input.value
-        });
-        form['viewing'] = true;
-        form['editing'] = false;
-        return form;
-      }
-      return form;
-    })
-    
-    this.setState({expInfo: editedArray});
-  }
-
-  handleDelete(event) {
-    console.log('delete');
-    const formHolderID = event.target.parentNode.parentNode.parentNode.attributes.formid.value;
-    const delArray =  this.state.expInfo.filter((form) => {
-      if (form.id === formHolderID) {
-        return false;
-      }
-      return true;
-    });
-
-    this.setState({expInfo: delArray});
-  }
-
-  addExperience(event) {
-    event.preventDefault();
-    console.log('inadded');
-    const emptyExp = {
-      editing: false,
-      viewing: false,
-      removeMe: true,
-    }
-    this.setState({expInfo: [...this.state.expInfo, emptyExp]});
-  }
   render () {
-    console.log('expInfo ', this.state.expInfo); 
-    
+    let expArray = '';
+    if (this.props.expShip.expArray.length) {
+      expArray = this.props.expShip.expArray;
+    }
+
     const defaultForm = 
     <div className="expFormHolder">
       <form className="expForm">
@@ -169,7 +80,7 @@ class ExpInfo extends React.Component {
         <label htmlFor="jobTasks">
           <textarea name="jobTasks" placeholder="Write a little bit about your responsibilites and acheivements there"/>
         </label>
-        <button className="addExperienceBtn" onClick={this.saveForm}>Save</button>
+        {this.props.saveButton}
       </form>
     </div>
 
@@ -195,7 +106,7 @@ class ExpInfo extends React.Component {
         <label htmlFor="jobTasks">
           <textarea name="jobTasks" defaultValue={form.jobTasks} placeholder="Write a little bit about your responsibilites and acheivements there"/>
         </label>
-        <button className="addExperienceBtn" onClick={this.saveEdit}>Save</button>
+        {this.props.saveEdit}
       </form>
     </div>
     return finishedForm;
@@ -206,12 +117,8 @@ class ExpInfo extends React.Component {
       const finishedForm =
       <div className="expFormHolder infoForm" onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} key={form.id} formid={form.id}>
         <div className="iconDiv">
-          <div className="editButtonHolder" onClick={this.handleEdit}>
-            <img className="editIcon actionIcon" src={editIcon} alt="Click this to edit" ></img>
-          </div>
-          <div className="deleteButtonHolder" onClick={this.handleDelete}>
-            <img className="deleteIcon actionIcon" src={deleteIcon} alt="Click this to delete"></img>
-          </div>
+          {this.props.handleEdit}
+          {this.props.handleDelete}
         </div>
         
         <form className="expForm">
@@ -227,10 +134,9 @@ class ExpInfo extends React.Component {
     }
 
     let returnForm = defaultForm;
-    console.log(this.state.expInfo.length);
-    if (this.state.expInfo.length > 0) {
-      returnForm = this.state.expInfo.map((form) => {
-        console.log(form);
+    if (expArray.length > 0) {
+      returnForm = expArray.map((form) => {
+        console.log('exparray form ', form);
         if (form.viewing === true) {
           console.log('return viewing');
           return viewForm(form);
@@ -241,13 +147,12 @@ class ExpInfo extends React.Component {
         return defaultForm;
       });
     }
-    console.log('rf ', returnForm);
     
     return (
-      <div className="edInfo">
+      <div className="expInfo">
         <h1>Experience:</h1>
         {returnForm}
-        <button className="addExperienceBtn" onClick={this.addExperience}>Add</button>
+        {this.props.addExperienceButton}
     </div>
     )
   }
