@@ -71,6 +71,9 @@ class ExpInfo extends React.Component {
         <label htmlFor="city">
           <input type="text" name="city" placeholder="Company City"/>
         </label>
+        <label htmlFor="state">
+          <input type="text" name="state" placeholder="Company State"/>
+        </label>
         <label htmlFor="startDate">
           <input type="text" name="startDate" placeholder="Starting Date"/>
         </label>
@@ -78,7 +81,7 @@ class ExpInfo extends React.Component {
           <input type="text" name="endDate" placeholder="Ending Date or Current"/>
         </label>
         <label htmlFor="jobTasks">
-          <textarea name="jobTasks" placeholder="Write a little bit about your responsibilites and acheivements there"/>
+          <textarea name="jobTasks" placeholder="Write a little bit about your responsibilites and achievements there"/>
         </label>
         {this.props.saveButton}
       </form>
@@ -97,6 +100,9 @@ class ExpInfo extends React.Component {
         <label htmlFor="city">
           <input type="text" name="city" defaultValue={form.city} placeholder="Company City"/>
         </label>
+        <label htmlFor="state">
+          <input type="text" name="state" defaultValue={form.state} placeholder="Company State"/>
+        </label>
         <label htmlFor="startDate">
           <input type="text" name="startDate" defaultValue={form.startDate} placeholder="Starting Date"/>
         </label>
@@ -104,7 +110,7 @@ class ExpInfo extends React.Component {
           <input type="text" name="endDate" defaultValue={form.endDate} placeholder="Ending Date or Current"/>
         </label>
         <label htmlFor="jobTasks">
-          <textarea name="jobTasks" defaultValue={form.jobTasks} placeholder="Write a little bit about your responsibilites and acheivements there"/>
+          <textarea name="jobTasks" defaultValue={form.jobTasks} placeholder="Write a little bit about your responsibilites and achievements there"/>
         </label>
         {this.props.saveEdit}
       </form>
@@ -125,6 +131,7 @@ class ExpInfo extends React.Component {
           <p className="expPosition">{form.position}</p>
           <p className="expCompany">{form.company}</p>
           <p className="expCity">{form.city}</p>
+          <p className="expCity">{form.state}</p>
           <p className="expStartDate">{form.startDate}</p>
           <p className="expEndDate">{form.endDate}</p>
           <p className="expJobTasks">{form.jobTasks}</p>
@@ -150,7 +157,7 @@ class ExpInfo extends React.Component {
     
     return (
       <div className="expInfo">
-        <h1>Experience:</h1>
+        <h1>Profesional Experience:</h1>
         {returnForm}
         {this.props.addExperienceButton}
     </div>

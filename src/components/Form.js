@@ -307,7 +307,7 @@ class Form extends React.Component {
         <Preview 
           genInfo={this.state.genShip.genInfo} 
           expArray={this.state.expShip.expArray} 
-          edInfo={this.state.edShip.edArray} 
+          edArray={this.state.edShip.edArray} 
           />
       </div>
     )

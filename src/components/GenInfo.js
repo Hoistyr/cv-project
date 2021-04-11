@@ -69,8 +69,10 @@ class GenInfo extends React.Component {
             <label htmlFor="lastName">
               <input type="text" name="lastName" placeholder="Last Name"/>
             </label>
+            <label htmlFor="address">
+              <input type="text" name="address" placeholder="Adress: (42 Wallaby Way, Sydney)"/>
+            </label>
             <label htmlFor="email">
-              
               <input type="email" name="email" placeholder="Email: (Example@example.com)"/>
             </label>
             <label htmlFor="phone">
@@ -95,8 +97,9 @@ class GenInfo extends React.Component {
         
         <div className="genForm">
           <h1>Personal Information:</h1>
-          <p className="genFirstName">{genInfo.firstName} {this.state.genInfo.lastName}</p>
+          <p className="genFirstName">{genInfo.firstName} {genInfo.lastName}</p>
           <p className="genLastName">{genInfo.email}</p>
+          <p className="genAddress">{genInfo.address}</p>
           <p className="genPhone">{genInfo.phone}</p>
           <p className="genLinkedIn">{genInfo.linkedIn}</p>
           <p className="genAboutMe">{genInfo.aboutMe}</p>
@@ -113,6 +116,9 @@ class GenInfo extends React.Component {
               <label htmlFor="lastName">
                 <input type="text" name="lastName" defaultValue={genInfo.lastName} placeholder="Last Name"/>
               </label>
+              <label htmlFor="address">
+                <input type="text" name="address" defaultValue={genInfo.address} placeholder="Adress: (42 Wallaby Way, Sydney)"/>
+            </label>
               <label htmlFor="email">
                 <input type="email" name="email" defaultValue={genInfo.email} placeholder="Email: (Example@example.com)"/>
               </label>
@@ -128,7 +134,6 @@ class GenInfo extends React.Component {
               {this.props.saveButton}
           </form>
         </div>
-      
 
       returnForm = defaultForm;
       if (genShip.viewing === true) {
