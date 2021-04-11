@@ -7,6 +7,13 @@ class Preview extends React.Component {
     this.state = {
 
     }
+    
+    this.printPreview = this.printPreview.bind(this);
+    
+  }
+  
+  printPreview() {
+    window.print();
   }
 
   render () {
@@ -59,29 +66,16 @@ class Preview extends React.Component {
 
         
         const returnSection = 
-        // <div className="experienceSection" key={expObject.id}>
-        //   <div className="expDateDiv">
-        //     <p className="expDateText">{startDate} - {endDate}</p>
-        //   </div>
-        //   <div className="expDetailsDiv">
-        //     <p className="positionText">{position}</p>
-        //     <p className="companyNameLocText"><i>{company}, {city}, {state}</i></p>
-        //     <p className="jobDetailsText">{jobTasks}</p>
-        //   </div>
-        // </div>
-
         <div class="experienceSection" key={expObject.id}>
           <div class="expDateDiv">
-            <p class="expDateText">Jan 2003 - Feb 2006</p>
-            </div>
-            <div class="expDetailsDiv">
-              <p class="positionText">asd</p>
-              <p class="companyNameLocText"><i>bbbb, Burgabooaa, PA</i></p>
-              <p class="jobDetailsText">
-                Nunc pretium neque eros, quis viverra dolor accumsan eget. Phasellus posuere erat sed libero convallis consequat ac fringilla massa. Pellentesque iaculis eros odio, vitae hendrerit ligula auctor at. Suspendisse euismod interdum neque, eget hendrerit odio tincidunt sed. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ac ipsum vitae diam suscipit feugiat ut eu ligula. Aliquam et rutrum massa. Quisque tempor lobortis magna nec bibendum. Nunc pharetra elementum pulvinar. In ac condimentum massa, in gravida magna. Aliquam ultricies risus dignissim, viverra elit sed, euismod mi. Fusce ac venenatis justo. Ut at ex congue tortor ullamcorper vulputate. 
-              </p>
-            </div>
+            <p className="expDateText">{startDate} - {endDate}</p>
           </div>
+          <div class="expDetailsDiv">
+            <p className="positionText">{position}</p>
+            <p className="companyNameLocText"><i>{company}, {city}, {state}</i></p>
+            <p className="jobDetailsText">{jobTasks}</p>
+          </div>
+        </div>
         return returnSection;
       })
     }
@@ -120,18 +114,7 @@ class Preview extends React.Component {
         }
 
         
-        const returnSection = 
-        // <div className="educationSection" key={edObject.id}>
-        //   <div className="edDateDiv">
-        //     <p className="edDateText">{startDate} - {endDate}</p>
-        //   </div>
-        //   <div className="edDetailsDiv">
-        //     <p className="positionText">{position}</p>
-        //     <p className="companyNameLocText"><i>{company}, {city}, {state}</i></p>
-        //     <p className="jobDetailsText">{jobTasks}</p>
-        //   </div>
-        // </div>
-
+        const returnSection =
         <div class="educationSection" key={edObject.id}>
           <div class="edDateDiv">
             <p className="edDateText">{startDate} - {endDate}</p>
@@ -144,70 +127,71 @@ class Preview extends React.Component {
       })
     }
     
-    console.log('preview expinfo', expArray);
+    let fullName = '';
+    let address = '';
+    let phone = '';
+    let email = '';
+    let linkedIn = '';
+    let personalDetails = '';
 
-    // <div className="personalInformationDiv">
-    //   <div className="fullNameDiv">
-    //     <h1 className="fullNameText">{genInfo.firstName} {genInfo.lastName}</h1>
-    //   </div>
-      
-    //   <div className="contactInfoDiv">
-    //     <div className="addressDiv">
-    //       <p className="addressTitle">Address</p>
-    //       <p className="addressText">{genInfo.address}</p>
-    //     </div>
-    //     <div className="phoneDiv">
-    //       <p className="phoneTitle">Phone</p>
-    //       <p className="phoneText">{genInfo.phone}</p>
-    //     </div>
-    //     <div className="emailDiv">
-    //       <p className="emailTitle">Email</p>
-    //       <p className="emailText">{genInfo.email}</p>
-    //     </div>
-    //     <div className="linkedInDiv">
-    //       <p className="linkedInTitle">linkedIn</p>
-    //       <p className="linkedInText">{genInfo.linkedIn}</p>
-    //     </div>
-    //   </div>
+    if (genInfo.firstName || genInfo.lastName) {
+      fullName = 
+      <h1 className="fullNameText">{genInfo.firstName} {genInfo.lastName}</h1>
+    }
 
-    //   <div className="personalDetailsDiv">
-    //       <p className="personalDetailsText">{genInfo.aboutMe}</p>
-    //   </div>
-    // </div>
-    
-    
-    
+    if (genInfo.address) {
+      address =
+      <div className="addressDiv">
+        <p className="addressTitle genTitle">Address</p>
+        <p className="addressText">{genInfo.address}</p>
+      </div>
+    }
+
+    if (genInfo.phone) {
+      phone =
+      <div className="phoneDiv contactInfoItem">
+        <p className="phoneTitle genTitle">Phone</p>
+        <p className="phoneText genText">{genInfo.phone}</p>
+      </div>
+    }
+
+    if (genInfo.email) {
+      email =
+      <div className="emailDiv contactInfoItem">
+        <p className="emailTitle genTitle">Email</p>
+        <p className="emailText genText">{genInfo.email}</p>
+      </div>
+    }
+
+    if (genInfo.linkedIn) {
+      linkedIn =
+      <div className="linkedInDiv contactInfoItem">
+        <p className="linkedInTitle genTitle">LinkedIn</p>
+        <p className="linkedInText genText">{genInfo.linkedIn}</p>
+      </div>
+    }
+
+    if (genInfo.aboutMe) {
+      personalDetails =
+      <div className="personalDetailsDiv">
+        <p className="personalDetailsText">{genInfo.aboutMe}</p>
+      </div>
+    }
+
     returnForm =
     <div className="preview">
       <div className="personalInformationDiv">
         <div className="fullNameDiv">
-          <h1 className="fullNameText">Bob Cratchett</h1>
+          {fullName}
         </div>
         
         <div className="contactInfoDiv">
-          <div className="addressDiv">
-            <p className="addressTitle genTitle">Address</p>
-            <p className="addressText">42 Wallaby Way, Sydney</p>
-          </div>
-          <div className="phoneDiv contactInfoItem">
-            <p className="phoneTitle genTitle">Phone</p>
-            <p className="phoneText genText">(555) 555-5555</p>
-          </div>
-          <div className="emailDiv contactInfoItem">
-            <p className="emailTitle genTitle">Email</p>
-            <p className="emailText genText">email@example.com</p>
-          </div>
-          <div className="linkedInDiv contactInfoItem">
-            <p className="linkedInTitle genTitle">LinkedIn</p>
-            <p className="linkedInText genText">https://www.linkedin.com/booga</p>
-          </div>
+          {address}
+          {phone}
+          {email}
+          {linkedIn}
         </div>
-
-        <div className="personalDetailsDiv">
-            <p className="personalDetailsText">
-              Nunc pretium neque eros, quis viverra dolor accumsan eget. Phasellus posuere erat sed libero convallis consequat ac fringilla massa. Pellentesque iaculis eros odio, vitae hendrerit ligula auctor at. Suspendisse euismod interdum neque, eget hendrerit odio tincidunt sed. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ac ipsum vitae diam suscipit feugiat ut eu ligula. Aliquam et rutrum massa. Quisque tempor lobortis magna nec bibendum. Nunc pharetra elementum pulvinar. In ac condimentum massa, in gravida magna. Aliquam ultricies risus dignissim, viverra elit sed, euismod mi. Fusce ac venenatis justo. Ut at ex congue tortor ullamcorper vulputate.
-            </p>
-        </div>
+        {personalDetails}
       </div>
       
       <div className="experienceDiv">
@@ -226,8 +210,9 @@ class Preview extends React.Component {
 
     const printDiv = 
     <div className="printButtonDiv">
-      <img className="printerIcon" src={printerIcon}></img>
+      <img className="printerIcon" alt="Icon of a printer for printing the CV" src={printerIcon} onClick={this.printPreview}></img>
     </div>;
+
     return (
       <div className="previewHolder">
         {printDiv}

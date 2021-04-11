@@ -102,6 +102,10 @@ label {
   justify-content: center;
 }
 
+.genAboutMe {
+  text-align: center;
+}
+
 .deleteButtonHolder {
   position: relative;
 }
@@ -231,6 +235,7 @@ label {
 
 .cvTitleText {
   border-bottom: solid 1px rgba(0, 0, 0, 0.267);
+  font-size: 1.25rem;
 }
 
 .genTitle {
@@ -350,5 +355,37 @@ label {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+}
+
+@media print {
+  @page {
+    size: auto;
+    margin: 0px;
+  }
+  
+  .header {
+    display: none;
+  }
+  
+  .input {
+    display: none;
+  }
+
+  .printButtonDiv {
+    display: none;
+  }
+
+  .previewHolder {
+    box-shadow: none;
+  }
+
+  .cvTitleText {
+    border-bottom: solid 1px rgba(0, 0, 0, 0.267);
+  }
+
+  .previewHolder {
+    margin: 0px;
+    padding: 0px;
   }
 }
